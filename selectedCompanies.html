@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selecionar Empresa</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .company {
+      margin: 10px 0;
+    }
+
+    .company input {
+      margin-right: 10px;
+    }
+
+    .btn {
+      background-color: #4caf50;
+      color: white;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Selecione uma Empresa</h2>
+    <div id="companyList">
+      <div class="company">
+        <input type="radio" name="company" value="Empresa A" id="empresaA">
+        <label for="empresaA">Empresa A</label>
+      </div>
+      <div class="company">
+        <input type="radio" name="company" value="Empresa B" id="empresaB">
+        <label for="empresaB">Empresa B</label>
+      </div>
+      <div class="company">
+        <input type="radio" name="company" value="Empresa C" id="empresaC">
+        <label for="empresaC">Empresa C</label>
+      </div>
+    </div>
+    <button class="btn" onclick="submitCompany()">Salvar Seleção</button>
+  </div>
+
+  <script>
+    const t = window.TrelloPowerUp.iframe();
+
+    function submitCompany() {
+      const selectedCompany = document.querySelector('input[name="company"]:checked').value;
+
+      // Salva a empresa selecionada no cartão
+      t.set('card', 'shared', 'selectedCompany', selectedCompany)
+        .then(() => {
+          // Redireciona para a página de carregamento
+          window.location.href = './loading.html';
+        });
+    }
+  </script>
+</body>
+</html>

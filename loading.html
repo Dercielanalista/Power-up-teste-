@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carregando...</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+      margin: 0;
+    }
+
+    .loading-container {
+      text-align: center;
+    }
+
+    .spinner {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <h2>Criando Etiqueta...</h2>
+  </div>
+
+  <script>
+    const t = window.TrelloPowerUp.iframe();
+
+    // Recupera a empresa selecionada e o cartão associado
+    t.get('card', 'shared', 'selectedCompany').then(selectedCompany => {
+      t.card('id').then(card => {
+        const apiKey = '443f0d339b8bc87364b3bf1800a08d4a';  // Substitua pelo seu Trello API Key
+        const token = 'fe5305f8b13042a2d8623b4c36a439347717486348ee976b75cb7b3836ac4151';  // Substitua pelo seu Trello Token
+        const labelName = selectedCompany;
+
+        // Chamada à API REST do Trello para criar a etiqueta
+        fetch(`https://api.trello.com/1/labels?name=${labelName}&color=green&idBoard=${card.idBoard}&key=${apiKey}&token=${token}`, {
+          method: 'POST'
+        })
+        .then(response => response.json())
+        .then(label => {
+          // Após criar a etiqueta, associamos ela ao cartão
+          return fetch(`https://api.trello.com/1/cards/${card.id}/idLabels?value=${label.id}&key=${apiKey}&token=${token}`, {
+            method: 'POST'
+          });
+        })
+        .then(() => {
+          // Redireciona de volta ao Trello ou para outra página após a criação da etiqueta
+          t.closePopup();  // Fecha o pop-up ou redireciona conforme necessário
+        });
+      });
+    });
+  </script>
+</body>
+</html>
